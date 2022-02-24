@@ -20,6 +20,8 @@ class KB : JavaPlugin(), Listener {
     }
 
     override fun onEnable() {
+        saveResource("config.yml", false)
+
         AmountData.values["x"] = config.getDouble("x")
         AmountData.values["y"] = config.getDouble("y")
         AmountData.values["z"] = config.getDouble("z")
@@ -43,7 +45,7 @@ class KB : JavaPlugin(), Listener {
         val damager = (e.player.lastDamageCause as? EntityDamageByEntityEvent)?.damager ?: return
 
         val x = damager.location.direction.x * (AmountData.values["x"] ?: fixKBConfig("x", .75))
-        val y = AmountData.values["y"] ?: fixKBConfig("y", .35)
+        val y = AmountData.values["y"] ?: fixKBConfig("y", .33)
         val z = damager.location.direction.z * (AmountData.values["z"] ?: fixKBConfig("z", .75))
         val airx = damager.location.direction.x * (AmountData.values["airx"] ?: fixKBConfig("airx", .65))
         val airy = AmountData.values["airy"] ?: fixKBConfig("airy", .25)
