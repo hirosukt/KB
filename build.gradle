@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.20-RC'
 }
 
 group = 'love.chihuyu'
@@ -17,9 +18,33 @@ repositories {
     }
 }
 
+configurations {
+    ktlint
+}
+
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    ktlint 'com.pinterest:ktlint:0.43.2'
 }
+
+task ktlint(type: JavaExec, group: "verification") {
+    ignoreExitValue true
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "src/**/*.kt"
+}
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    ignoreExitValue true
+    description = "Fix Kotlin code style deviations."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "-F", "src/**/*.kt"
+}
+
+check.dependsOn ktlint
 
 def targetJavaVersion = 17
 java {
@@ -28,6 +53,15 @@ java {
     targetCompatibility = javaVersion
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+jar {
+    from {
+        duplicatesStrategy 'exclude'
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
     }
 }
 
@@ -43,5 +77,15 @@ processResources {
     filteringCharset 'UTF-8'
     filesMatching('plugin.yml') {
         expand props
+    }
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
