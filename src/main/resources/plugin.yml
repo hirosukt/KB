@@ -1,0 +1,8 @@
+name: KB
+version: '${version}'
+main: love.chihuyu.kb.KB
+api-version: 1.18
+prefix: KB
+authors: [ Hirosuke ]
+description: Modfiing player's knockback.
+website: hirosuke.works
