@@ -1,5 +1,6 @@
 package love.chihuyu.kb
 
+import love.chihuyu.kb.command.commands.CommandKB
 import love.chihuyu.kb.config.AmountData
 import love.chihuyu.kb.utils.PlayerUtil.isGround
 import org.bukkit.event.EventHandler
@@ -27,6 +28,8 @@ class KB : JavaPlugin(), Listener {
         AmountData.values["airz"] = config.getDouble("airz")
 
         server.pluginManager.registerEvents(this, this)
+
+        CommandKB.register()
     }
 
     override fun onDisable() {
