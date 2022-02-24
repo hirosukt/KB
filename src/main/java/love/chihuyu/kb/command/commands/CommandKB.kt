@@ -7,21 +7,9 @@ import org.bukkit.command.CommandSender
 
 object CommandKB : Command("kb") {
     override fun onCommand(sender: CommandSender, label: String, args: Array<out String>) {
-        if (!sender.hasPermission("kb.command.kb") || args.isEmpty()) return
+        if (args.isEmpty()) return
 
-        if (args[0] == "edit") {
-            try {
-                AmountData.values["x"] = args[1].toDouble()
-                AmountData.values["y"] = args[2].toDouble()
-                AmountData.values["z"] = args[3].toDouble()
-                AmountData.values["airx"] = args[4].toDouble()
-                AmountData.values["airy"] = args[5].toDouble()
-                AmountData.values["airz"] = args[6].toDouble()
-                sender.sendMessage("§aKnockback successfully set.")
-            } catch (e: Exception) {
-                sender.sendMessage("§4Something went wrong! below the error: \n" + e.message)
-            }
-        } else if (args[0] == "load") {
+        fun load() {
             try {
                 AmountData.values["x"] = plugin.config.getDouble("x")
                 AmountData.values["y"] = plugin.config.getDouble("y")
@@ -31,12 +19,37 @@ object CommandKB : Command("kb") {
                 AmountData.values["airz"] = plugin.config.getDouble("airz")
                 sender.sendMessage("§aKnockback successfully loaded.")
             } catch (e: Exception) {
-                sender.sendMessage("§4Something went wrong! below the error: \n" + e.message)
+                sender.sendMessage("§4Something went wrong! error is below : \n" + e.message)
+                return
             }
+        }
+
+        if (args[0] == "set") {
+            if (!sender.hasPermission("kb.command.set")) return
+            try {
+                plugin.config.set("x", args[1].toDouble())
+                plugin.config.set("y", args[2].toDouble())
+                plugin.config.set("z", args[3].toDouble())
+                plugin.config.set("airx", args[4].toDouble())
+                plugin.config.set("airy", args[5].toDouble())
+                plugin.config.set("airz", args[6].toDouble())
+                sender.sendMessage("§aKnockback successfully set.")
+                load()
+            } catch (e: Exception) {
+                sender.sendMessage("§4Something went wrong! error is below : \n" + e.message)
+                return
+            }
+        } else if (args[0] == "load") {
+            if (!sender.hasPermission("kb.command.load")) return
+            load()
         }
     }
 
-    override fun onTabComplete(sender: CommandSender, label: String, args: Array<out String>): List<String>? {
-        TODO("Not yet implemented")
+    override fun onTabComplete(sender: CommandSender, label: String, args: Array<out String>): List<String> {
+        return if (args.isNotEmpty()) {
+            listOf("set", "load")
+        } else {
+            emptyList()
+        }
     }
 }

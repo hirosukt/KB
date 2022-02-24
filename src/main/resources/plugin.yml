@@ -6,3 +6,17 @@ prefix: KB
 authors: [ Hirosuke ]
 description: Modfiing player's knockback.
 website: hirosuke.works
+commands:
+  kb:
+    aliases:
+      - knockback
+permissions:
+  kb.command.*:
+    default: op
+    children:
+      kb.command.set: true
+      kb.command.load: true
+  kb.command.set:
+    default: op
+  kb.command.load:
+    default: op
