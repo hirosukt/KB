@@ -3,10 +3,10 @@ Simple knockback modifying plugin.
 
 ## Commands
 
-* `/kb set <x> <y> <z> <airx> <airy> <airz>`  
+* `/kb set <x> <y> <z> <airx> <airy> <airz>`
 set knockback amount and save.
 
-* `/kb load`  
+* `/kb load`
 load config.
 
 ## Permissions
